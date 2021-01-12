@@ -20,7 +20,7 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
-	<!-- Processes application requests -->
+	<!-- Processes application requests 
 	<servlet>
 		<servlet-name>appServlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -35,5 +35,29 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	
+	가. <url-pattern>*.do</url-pattern> 부분
+		이는 앞으로 서블릿에 어떠한 요청을 할 때, .do를 통해서만 요청을 전달하고, 다른 방식의 요청, 예를 들어 .html의 직접적인 호출등은 이제 허락되지 않는다.
+	나.	contextConfigLocation의 설정
+		기존에는 dispatcher 의 설정인 contextConfigLocation이 
+			/WEB-INF/spring/appServlet/servlet-context.xml에 존재하였는데, 
+		이를 /WEB-INF/config/action-servlet.xml로 변경하고, 
+			인터셉터(Intercepter)도 추가하려는 목적이다. 
+		인터셉터에 대한 설명은 다음 글에서 하려고 한다. 
+	-->
+	<servlet> 
+		<servlet-name>action</servlet-name> 
+		<servlet-class> org.springframework.web.servlet.DispatcherServlet </servlet-class> 
+		<init-param>
+			<param-name>contextConfigLocation</param-name> 
+			<param-value> /WEB-INF/config/*-servlet.xml </param-value> 
+		</init-param> 
+		<load-on-startup>1</load-on-startup> 
+	</servlet> 
+	<servlet-mapping> 
+		<servlet-name>action</servlet-name> 
+		<url-pattern>*.do</url-pattern> 
+	</servlet-mapping>
+
 
 </web-app>
