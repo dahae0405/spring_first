@@ -19,43 +19,68 @@ import first.sample.service.SampleServiceImpl;
 @Controller
 public class SampleController {
 	Logger log = Logger.getLogger(this.getClass());
-	
-	@Resource(name="sampleService")
+
+	@Resource(name = "sampleService")
 	private SampleServiceImpl sampleService;
-	
-	@RequestMapping(value="/sample/openSampleBoardList.do")
-    public ModelAndView openSampleBoardList(Map<String,Object> commandMap) throws Exception{
-    	ModelAndView mv = new ModelAndView("/sample/boardList");
-    	System.out.println("111");
-    	List<Map<String,Object>> list = sampleService.selectBoardList(commandMap);
-    	mv.addObject("list", list);
-    	
-    	return mv;
-    }
-	
-	@RequestMapping(value="/sample/testMapArgumentResolver.do")
-	public ModelAndView testMapArgumentResolver(CommandMap commandMap) throws Exception{
+
+	// 게시판 목록
+	@RequestMapping(value = "/sample/openBoardList.do")
+	public ModelAndView openSampleBoardList(Map<String, Object> commandMap) throws Exception {
+		ModelAndView mv = new ModelAndView("/sample/boardList");
+		log.info("Controller집입 >> openBoardList");
+		List<Map<String, Object>> list = sampleService.selectBoardList(commandMap);
+		log.info("DB데이터get 작업완료 list = " + list);
+		mv.addObject("list", list);
+
+		return mv;
+	}
+
+	// - commandMap 생성 및 test
+	@RequestMapping(value = "/sample/testMapArgumentResolver.do")
+	public ModelAndView testMapArgumentResolver(CommandMap commandMap) throws Exception {
 		ModelAndView mv = new ModelAndView("");
 		System.out.println("2222");
-		System.out.println("commandMap = "+commandMap);
-		System.out.println("commandMap > "+commandMap.isEmpty());
-		if(commandMap.isEmpty() == false){
+		System.out.println("commandMap = " + commandMap);
+		System.out.println("commandMap > " + commandMap.isEmpty());
+		if (commandMap.isEmpty() == false) {
 			System.out.println("3333");
-			Iterator<Entry<String,Object>> iterator = commandMap.getMap().entrySet().iterator();
-			Entry<String,Object> entry = null;
-			while(iterator.hasNext()){
+			Iterator<Entry<String, Object>> iterator = commandMap.getMap().entrySet().iterator();
+			Entry<String, Object> entry = null;
+			while (iterator.hasNext()) {
 				entry = iterator.next();
-				System.out.println("entry = "+entry);
-				
-				log.info("key : "+entry.getKey()+", value : "+entry.getValue());
+				System.out.println("entry = " + entry);
+
+				log.info("key : " + entry.getKey() + ", value : " + entry.getValue());
 			}
 		}
 		return mv;
 	};
+
+	// 상세 - 작성하기
+	@RequestMapping(value = "/sample/openBoardWrite.do")
+	public ModelAndView openBoardWrite(CommandMap commandMap) throws Exception {
+		ModelAndView mv = new ModelAndView("/sample/boardWrite");
+		return mv;
+	}
+
+	// 입력작업
+	@RequestMapping(value = "/sample/insertBoard.do")
+	public ModelAndView insertBoard(CommandMap commandMap) throws Exception {
+		log.info("Controller - insertBoard");
+		ModelAndView mv = new ModelAndView("redirect:/sample/openBoardList.do");
+		log.info("model생성 작업완료");
+		sampleService.insertBoard(commandMap.getMap());
+		log.info("insert 작업완료 ");
+		return mv;
+	}
 	
+	// 상세 조회
+	@RequestMapping(value = "/sample/openBoardDetail.do")
+	public ModelAndView openBoardDetail(CommandMap commandMap) throws Exception {
+		ModelAndView mv = new ModelAndView("/sample/boardDetail");
+		Map<String, Object> map = sampleService.selectBoardDetail(commandMap.getMap());
+		mv.addObject("map", map);
+		return mv;
+	}
+
 };
-
-
-
-
-

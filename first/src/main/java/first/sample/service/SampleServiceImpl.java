@@ -23,6 +23,41 @@ public class SampleServiceImpl implements SampleService{
 	@Override
 	public List<Map<String, Object>> selectBoardList(Map<String, Object> map) throws Exception {
 		return sampleDAO.selectBoardList(map);
+	};
+
+	@Override
+	public void insertBoard(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		sampleDAO.insertBoard(map);
 	}
 
+	
+	/*
+	 * 그리고 게시판 상세 내용은 목록과는 다르게 단 하나의 행(reocrd)만 조회하기 때문에, Map의 형태로 결과값을 받았다.
+
+	 * 게시글 상세를 조회하기 위해서는 다음의 두가지의 동작이 필요하다.
+		1) 해당 게시글의 조회수를 1 증가시킨다.
+		2) 게시글의 상세내용을 조회한다. 
+	 	* 즉, 이 두가지 동작은 하나의 트랜잭션으로 처리가 되어야 하는 부분이다. 
+
+ 	* 여기서는 게시글을 조회하기 위해서 위의 2가지 동작을 수행하는 역할을 하고있다. 
+		* 따라서 DAO에서 2개 이상의 동작을 수행하면 안된다.
+			* DAO는 단순히 DB에 접속하여 데이터를 조회하는 역할만 수행하는 클래스다. 
+		* 마지막으로 DAO에서는 위에서 설명한 두가지 동작에 대한 쿼리를 각각 호출하도록 하였다.
+	* updateHitCnt 라는 쿼리와 selectBoardDetail 이라는 쿼리를 각각 수행하는것을 볼 수 있다				
+	 
+	 * 확인
+	 	* 	여기서 잘 보면 쿼리는 2개가 실행되었지만 단 하나의 START, END를 볼 수 있다. 
+  
+
+	 */ 
+	@Override
+	public Map<String, Object> selectBoardDetail(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		sampleDAO.updateHitCnt(map);
+		Map<String, Object> resultMap = sampleDAO.selectBoardDetail(map);
+		return resultMap;
+	};
+	
+	
 };

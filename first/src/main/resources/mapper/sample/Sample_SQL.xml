@@ -3,7 +3,8 @@
 
 <mapper namespace="sample">
 
-	<select id="selectBoardList" parameterType="hashmap" resultType="hashmap"> 	
+	<select id="selectBoardList" parameterType="hashmap"
+		resultType="hashmap"> 	
 		<![CDATA[ 
 				SELECT 
 					IDX,
@@ -17,6 +18,44 @@
 				ORDER BY IDX DESC 
 		]]>
 	</select>
+
+	<!-- sample.insertBoard -->
+	<insert id="insertBoard" parameterType="hashmap"> 	
+		<![CDATA[ 
+			INSERT INTO TB_BOARD 
+			( 
+				IDX, TITLE, CONTENTS, HIT_CNT, DEL_GB, CREA_DTM, CREA_ID 
+			) 
+			VALUES 
+			( 
+				SEQ_TB_BOARD_IDX.NEXTVAL, #{TITLE}, #{CONTENTS}, 0, 'N', SYSDATE, 'Admin' 
+			)
+		]]>
+	</insert>
+
+	<!-- 상세 조회하기 - 작업1. 조회수증가 -->
+	<update id="updateHitCnt" parameterType="hashmap"> 
+		<![CDATA[ 
+		UPDATE 
+			TB_BOARD 
+		SET 
+			HIT_CNT = NVL(HIT_CNT, 0) + 1 
+		WHERE 
+			IDX = #{IDX} 
+			]]>
+	</update>
+	<!-- 상세 조회하기 - 작업2. 상세내용조회 -->
+	<select id="selectBoardDetail" parameterType="hashmap"
+		resultType="hashmap"> 
+		<![CDATA[ 
+			SELECT 
+				IDX, HIT_CNT, CREA_ID, CREA_DTM, TITLE, CONTENTS 
+			FROM 
+				TB_BOARD WHERE IDX = #{IDX} 
+		]]>
+	</select>
+
+
 
 
 </mapper>

@@ -11,7 +11,14 @@ public interface SampleService {
 		return null;
 	}
 	*/
+	// 목록 조회
 	List<Map<String, Object>> selectBoardList(Map<String, Object> map) throws Exception;
 	
+	// 입력
+	void insertBoard(Map<String, Object> map) throws Exception;
+	
+	// 상세 조회
+	Map<String, Object> selectBoardDetail(Map<String, Object> map) throws Exception;
 
+	
 }
