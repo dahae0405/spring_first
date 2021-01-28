@@ -56,7 +56,32 @@
 	</select>
 
 
+	<!-- 수정하기 -->
+	<update id="updateBoard" parameterType="hashmap">
+		<![CDATA[ 
+			UPDATE 
+				TB_BOARD 
+			SET 
+				TITLE = #{TITLE}, CONTENTS = #{CONTENTS} 
+			WHERE 
+				IDX = #{IDX} 
+		]]>
+	</update>
 
+	<!-- 
+		삭제하기
+		주의) 게시글을 삭제하기보다는 구분값을 변경
+	 -->
+	<update id="deleteBoard" parameterType="hashmap"> 
+		<![CDATA[ 
+			UPDATE 
+				TB_BOARD 
+			SET 
+				DEL_GB = 'Y' 
+			WHERE 
+				IDX = #{IDX} 
+		]]>
+	</update>
 
 </mapper>
 

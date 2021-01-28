@@ -19,6 +19,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
 		if (log.isDebugEnabled()) {
 			log.debug("====================================== START ======================================");
 			log.debug(" Request URI \t: " + request.getRequestURI());
+			log.debug(" Request QueryString \t: " + request.getQueryString() ); // request 객체 추가 찾고 https://codevang.tistory.com/198 
 		}
 		return super.preHandle(request, response, handler);
 	}

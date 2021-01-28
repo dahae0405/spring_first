@@ -4,6 +4,8 @@ import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.ibatis.logging.Log;
+import org.apache.ibatis.logging.LogFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -11,6 +13,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import first.common.common.CommandMap;
+import first.common.dao.AbstractDAO;
+
 
 /* 없어도 개발은 할 수 있지만, 개발을 더욱 편하게 할수 있는 역할
 
@@ -53,6 +57,14 @@ HandlerMethodArgumentResolver
 
 */
 public class CustomMapArgumentResolver implements HandlerMethodArgumentResolver{
+	protected Log log = LogFactory.getLog(CustomMapArgumentResolver.class);
+	
+	protected void printCommandMap(Object commandMap) {
+		if (log.isDebugEnabled()) {
+			log.debug("\t commandMap \t: " + commandMap);
+		}
+	}
+	
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
 		return CommandMap.class.isAssignableFrom(parameter.getParameterType());
@@ -69,11 +81,16 @@ public class CustomMapArgumentResolver implements HandlerMethodArgumentResolver{
 		String[] values = null;
 		while(enumeration.hasMoreElements()){
 			key = (String) enumeration.nextElement();
-			values = request.getParameterValues(key);
+			values = request.getParameterValues(key); // [Ljava.lang.String;@392b54a5 : 'L'배열임
 			if(values != null){
+				log.debug("printCommandMap :");
 				commandMap.put(key, (values.length > 1) ? values:values[0] );
+				log.debug("key :"+ key+" / vaule : "+values[0].toString());
 			}
 		}
+		
+		
+		
 		return commandMap;
 	}
 };
