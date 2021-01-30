@@ -30,7 +30,7 @@
 			keyProperty
 				getGeneratedKeys() 메서드나 insert구문의 selectKey에 의해 선택된 키를 셋팅
 	-->
-	<insert id="insertBoard" parameterType="hashmap" useGeneratedKeys="true" keyProperty="IDX">
+	<insert id="insertBoard" parameterType="hashmap" useGeneratedKeys="true" keyProperty="IDX" >
 		<selectKey keyProperty="IDX" resultType="string" order="BEFORE">
 			SELECT SEQ_TB_BOARD_IDX.NEXTVAL FROM DUAL
 		</selectKey>
@@ -41,7 +41,7 @@
 			) 
 			VALUES 
 			( 
-				SEQ_TB_BOARD_IDX.NEXTVAL, #{TITLE}, #{CONTENTS}, 0, 'N', SYSDATE, 'Admin' 
+				SEQ_TB_BOARD_IDX.CURRVAL , #{TITLE}, #{CONTENTS}, 0, 'N', SYSDATE, 'Admin' 
 			)
 		]]>
 	</insert>
@@ -93,6 +93,7 @@
 		]]>
 	</update>
 
+	<!-- 첨부파일 저장 -->
 	<insert id="insertFile" parameterType="hashmap"> 
 		<![CDATA[ 
 			INSERT 
@@ -102,10 +103,27 @@
 				) 
 			VALUES 
 				( 
-					SEQ_TB_FILE_IDX.NEXTVAL, #{BOARD_IDX}, #{ORIGINAL_FILE_NAME}, #{STORED_FILE_NAME}, #{FILE_SIZE}, 'Admin' 
+					( SELECT LAST_NUMBER FROM  USER_SEQUENCES WHERE SEQUENCE_NAME = 'SEQ_TB_BOARD_IDX'  ), #{BOARD_IDX}, #{ORIGINAL_FILE_NAME}, #{STORED_FILE_NAME}, #{FILE_SIZE}, 'Admin' 
 				) 
 		]]>
 	</insert>
+
+
+	<!-- 파일정보 조회 -->
+	<select id="selectFileList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+			    IDX,
+			    ORIGINAL_FILE_NAME,
+			    ROUND(FILE_SIZE/1024,1) AS FILE_SIZE
+			FROM
+			    TB_FILE
+			WHERE
+			    BOARD_IDX = #{IDX}
+			    AND DEL_GB = 'N'
+		]]>
+	</select>
+
 
 
 

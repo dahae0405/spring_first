@@ -17,7 +17,7 @@
 		<tbody>
 			<tr>
 				<th scope="row">글 번호</th>
-				<td>${map.TITLE }</td>
+				<td>${map.IDX }</td>
 				<th scope="row">조회수</th>
 				<td>${map.HIT_CNT }</td>
 			</tr>
@@ -34,20 +34,29 @@
 			<tr>
 				<td colspan="4">${map.CONTENTS }</td>
 			</tr>
+			<tr>
+				<th scope="row">첨부파일</th>
+				<td colspan="3"><c:forEach var="row" items="${list }">
+						<input type="hidden" id="IDX" value="${row.IDX }">
+						<a href="#this" name="file">${row.ORIGINAL_FILE_NAME }</a> (${row.FILE_SIZE }kb) </c:forEach>
+				</td>
+			</tr>
 		</tbody>
 	</table>
+	<br />
 	<a href="#this" class="btn" id="list">목록으로</a>
 	<a href="#this" class="btn" id="update">수정하기</a>
 	<%@ include file="/WEB-INF/include/include-body.jsp"%>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$("#list").on("click", function(e) { //목록으로 버튼
-				e.preventDefault();
-				fn_openBoardList();
-			});
-			$("#update").on("click", function(e) {
+	<script type="text/javascript"> 
+		$(document).ready(function(){ 
+			$("#list").on("click", function(e){ //목록으로 버튼
+				e.preventDefault(); fn_openBoardList(); }); $("#update").on("click", function(e){ 
+				//수정하기 버튼
 				e.preventDefault();
 				fn_openBoardUpdate();
+			});
+			$("a[name='file']").on("click", function(e) { //파일 이름
+				e.preventDefault();
 			});
 		});
 		function fn_openBoardList() {

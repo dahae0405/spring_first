@@ -1,5 +1,6 @@
 package first.sample.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,7 @@ public class SampleServiceImpl implements SampleService {
 		sampleDAO.insertBoard(map);
 		
 		List<Map<String,Object>> list = FileUtils.parseInsertFileInfo(map, request);
+		
 		for(int i=0, size=list.size(); i<size; i++){
 			sampleDAO.insertFile(list.get(i));
 		}
@@ -73,9 +75,18 @@ public class SampleServiceImpl implements SampleService {
 	 */
 	@Override
 	public Map<String, Object> selectBoardDetail(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
+		// 게시판 조회수 갱신
 		sampleDAO.updateHitCnt(map);
-		Map<String, Object> resultMap = sampleDAO.selectBoardDetail(map);
+		
+		// 게시판 정보 조회
+		Map<String, Object> resultMap = new HashMap<String,Object>();
+		Map<String, Object> tempMap = sampleDAO.selectBoardDetail(map);
+		resultMap.put("map", tempMap);
+		
+		// 피일 정보 조회
+		List<Map<String,Object>> list = sampleDAO.selectFileList(map);
+		resultMap.put("list", list);
+		
 		return resultMap;
 	}
 
