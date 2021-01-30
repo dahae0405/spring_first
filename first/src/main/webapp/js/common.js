@@ -28,12 +28,12 @@ function ComSubmit(opt_formId) {
 	this.url = ""; 
 	
 	if(this.formId == "commonForm"){ 
-		$("#commonForm")[0].reset(); 
+		$("#commonForm").empty(); 
+		 
 	}; 
 	
 	this.setUrl = function setUrl(url){ this.url = url; }; 
 	this.addParam = function addParam(key, value){ 
-		
 		$("#"+this.formId).append($("<input type='hidden' name='"+key+"' id='"+key+"' value='"+value+"' >"));
 		
 	 };

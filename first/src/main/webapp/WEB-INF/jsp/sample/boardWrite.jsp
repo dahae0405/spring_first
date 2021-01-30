@@ -76,8 +76,9 @@
 			$("a[name='delete']").on("click", function(e) { //삭제 버튼
 				e.preventDefault();
 				fn_deleteFile($(this));
-		}
-			
+			});
+		};
+		
 		function fn_deleteFile(obj) {
 			obj.parent().remove();
 		}
