@@ -38,5 +38,12 @@ public class SampleDAO extends AbstractDAO {
 	public void deleteBoard(Map<String, Object> map) throws Exception {
 		update("sample.deleteBoard", map);
 	}
+	
+	/* 첨부파일 insert */
+	public void insertFile(Map<String, Object> map) throws Exception{
+		insert("sample.insertFile", map);
+	}
+
+
 
 };

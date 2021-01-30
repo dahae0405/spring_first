@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -13,13 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import first.common.common.CommandMap;
-import first.sample.service.SampleService;
+import first.common.util.FileUtils;
 import first.sample.service.SampleServiceImpl;
 
 @Controller
 public class SampleController {
 	Logger log = Logger.getLogger(this.getClass());
-
+	
+	@Resource(name="fileUtils")
+	private FileUtils fileUtils;
+	
 	@Resource(name = "sampleService")
 	private SampleServiceImpl sampleService;
 
@@ -65,12 +69,13 @@ public class SampleController {
 
 	// 입력작업
 	@RequestMapping(value = "/sample/insertBoard.do")
-	public ModelAndView insertBoard(CommandMap commandMap) throws Exception {
+	public ModelAndView insertBoard(CommandMap commandMap, HttpServletRequest request) throws Exception{
+
 		log.info("Controller - insertBoard");
 		ModelAndView mv = new ModelAndView("redirect:/sample/openBoardList.do");
 		log.info("model생성 작업완료");
-		sampleService.insertBoard(commandMap.getMap());
-		log.info("insert 작업완료 ");
+		
+		sampleService.insertBoard(commandMap.getMap(), request);
 		return mv;
 	}
 

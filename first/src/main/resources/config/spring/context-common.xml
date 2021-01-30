@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:cache="http://www.springframework.org/schema/cache"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    					http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       					http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+       					
+    <!-- 10. 스프링 공통적인 설정
+		
+			작업1.  MultipartResolver 설정
+					 스프링에서 파일업로드 기능을 구현해놓은 클래스다.
+					 서버에 업로드할 수 있는 첨부파일의 최대 크기를 의미
+					 
+	
+	 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    	<property name="maxUploadSize" value="100000000" />
+        <property name="maxInMemorySize" value="100000000" />
+    </bean>
+</beans>
+

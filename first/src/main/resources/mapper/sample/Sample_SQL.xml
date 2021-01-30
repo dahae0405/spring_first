@@ -19,9 +19,22 @@
 		]]>
 	</select>
 
-	<!-- sample.insertBoard -->
-	<insert id="insertBoard" parameterType="hashmap"> 	
-		<![CDATA[ 
+	<!-- sample.insertBoard
+		목표
+			<selectKey> 구문을 통해서 다음 게시글 번호를 가져온 후, 그 값은 파라미터에 다시 저장된다.
+			-> FileUtils 클래스에서 방금 insert가 되었던 IDX값을 사용 
+ 
+		속성
+			useGeneratedKeys
+				DB에 입력(insert, update)시 데이터베이스에서 자동적으로 증가되는 키를 받는 JDBC의 getGeneratedKeys() 메서드를 사용
+			keyProperty
+				getGeneratedKeys() 메서드나 insert구문의 selectKey에 의해 선택된 키를 셋팅
+	-->
+	<insert id="insertBoard" parameterType="hashmap" useGeneratedKeys="true" keyProperty="IDX">
+		<selectKey keyProperty="IDX" resultType="string" order="BEFORE">
+			SELECT SEQ_TB_BOARD_IDX.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
 			INSERT INTO TB_BOARD 
 			( 
 				IDX, TITLE, CONTENTS, HIT_CNT, DEL_GB, CREA_DTM, CREA_ID 
@@ -68,10 +81,7 @@
 		]]>
 	</update>
 
-	<!-- 
-		삭제하기
-		주의) 게시글을 삭제하기보다는 구분값을 변경
-	 -->
+	<!-- 삭제하기 주의) 게시글을 삭제하기보다는 구분값을 변경 -->
 	<update id="deleteBoard" parameterType="hashmap"> 
 		<![CDATA[ 
 			UPDATE 
@@ -82,6 +92,22 @@
 				IDX = #{IDX} 
 		]]>
 	</update>
+
+	<insert id="insertFile" parameterType="hashmap"> 
+		<![CDATA[ 
+			INSERT 
+				INTO TB_FILE 
+				( 
+					IDX, BOARD_IDX, ORIGINAL_FILE_NAME, STORED_FILE_NAME, FILE_SIZE, CREA_ID 
+				) 
+			VALUES 
+				( 
+					SEQ_TB_FILE_IDX.NEXTVAL, #{BOARD_IDX}, #{ORIGINAL_FILE_NAME}, #{STORED_FILE_NAME}, #{FILE_SIZE}, 'Admin' 
+				) 
+		]]>
+	</insert>
+
+
 
 </mapper>
 

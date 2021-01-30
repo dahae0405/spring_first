@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import first.common.util.FileUtils;
 import first.sample.dao.SampleDAO;
 
 @Service("sampleService")
@@ -27,10 +29,32 @@ public class SampleServiceImpl implements SampleService {
 	};
 
 	@Override
-	public void insertBoard(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
+	public void insertBoard(Map<String, Object> map, HttpServletRequest request) throws Exception {
+		/*
+		 * // 파일정보 조회 ( 잘들어왔는지 test) MultipartHttpServletRequest
+		 * multipartHttpServletRequest = (MultipartHttpServletRequest)request;
+		 * Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
+		 * MultipartFile multipartFile = null;
+		 * 
+		 * while(iterator.hasNext()){ multipartFile =
+		 * multipartHttpServletRequest.getFile(iterator.next());
+		 * if(multipartFile.isEmpty() == false){
+		 * log.debug("------------- file start -------------");
+		 * log.debug("name : "+multipartFile.getName());
+		 * log.debug("filename : "+multipartFile.getOriginalFilename());
+		 * log.debug("size : "+multipartFile.getSize());
+		 * log.debug("-------------- file end --------------\n"); } }
+		 */
+		
 		sampleDAO.insertBoard(map);
+		
+		List<Map<String,Object>> list = FileUtils.parseInsertFileInfo(map, request);
+		for(int i=0, size=list.size(); i<size; i++){
+			sampleDAO.insertFile(list.get(i));
+		}
+
 	}
+
 
 	/*
 	 * 그리고 게시판 상세 내용은 목록과는 다르게 단 하나의 행(reocrd)만 조회하기 때문에, Map의 형태로 결과값을 받았다.

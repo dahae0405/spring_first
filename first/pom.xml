@@ -205,7 +205,7 @@
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-core-asl</artifactId>
 			<version>1.9.13</version>
-		</dependency> <!-- MultipartHttpServletRequset -->
+		</dependency> <!-- MultipartHttpServletRequset 파일 업로드 및 다운로드 -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
