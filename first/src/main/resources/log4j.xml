@@ -2,28 +2,44 @@
 <!DOCTYPE log4j:configuration SYSTEM "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
 <log4j:configuration>
 
+	<!-- log4j
+		1. STS플러그인을 이용해서 Spring 프로젝트를 생성하면  일반적으로 log4j가 포함되어 있다. 
+			MyBatis 연동을 하고나서 설정을 건드리지 않으면 쿼리는 콘솔창에 출력되지 않는다. 
+			이럴 때는 log4j.xml 파일의 설정을 조금만 바꿔주면 간단히 해결된다.
+			
+		2. FATAL > ERROR > WARN > INFO > DEBUG > TRACE
+			로그는 dubug
+			쿼리로그는 trace OR all
+			
+		3. 특별한 목적이 없다면 sts에 기본적으로 포함되어 있는 log4j를 사용하고, 성능이나 기능상 부족함이 느껴지면 log4j2나 
+			logback으로 갈아타는 것이 바람직해보인다.  
+	-->
+			
+			
 	<!-- Appenders -->
-	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+	<appender name="console"
+		class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
 		</layout>
 	</appender>
-	
-	<!-- Application Loggers -->
+
+	<!-- Application Loggers level이 debug이하여야 sql문이 출력되는데 기본값은 info로 되어있다. debug로 
+		바꿔주면 아래와 같이 sql문이 출력되는 것을 볼 수 있다. -->
 	<logger name="first">
-		<level value="debug" />
+		<level value="trace" />
 	</logger>
-	
+
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">
 		<level value="info" />
 	</logger>
-	
+
 	<logger name="org.springframework.beans">
 		<level value="info" />
 	</logger>
-	
+
 	<logger name="org.springframework.context">
 		<level value="info" />
 	</logger>
@@ -32,10 +48,13 @@
 		<level value="info" />
 	</logger>
 
-	<!-- Root Logger -->
+	<!-- Root Logger root logger는 별도로 설정된 패키지를 제외한 모든 패키지에 대한 설정인듯 하다. 모든 로그에 
+		대한 설정을 한번에 할 수 있다. -->
+		
 	<root>
-		<priority value="warn" />
+		<priority value="trace" />
 		<appender-ref ref="console" />
 	</root>
+
 	
 </log4j:configuration>
