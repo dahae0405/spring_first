@@ -92,8 +92,24 @@ public class SampleServiceImpl implements SampleService {
 
 	/* 수정 */
 	@Override
-	public void updateBoard(Map<String, Object> map) throws Exception {
+	public void updateBoard(Map<String, Object> map, HttpServletRequest request) throws Exception{
+		// 게시판 정보 - 갱신
 		sampleDAO.updateBoard(map);
+		
+		// 게시판 파일정보 - 초기화
+		sampleDAO.deleteFileList(map); //첨부파일을 전부 삭제처리(DEL_GB = 'Y')를 하는 역할
+		// 게시판 파일정보 - 분기별로 갱신 혹은 신규등록
+		List<Map<String,Object>> list = FileUtils.parseUpdateFileInfo(map, request);
+		Map<String,Object> tempMap = null;
+		for(int i=0, size=list.size(); i<size; i++){
+			tempMap = list.get(i);
+			if(tempMap.get("IS_NEW").equals("Y")){ //IS_NEW라는 값이 "Y"인 경우는 신규 저장될 파일이라는 의미이고, "Y"가 아니면 기존에 저장되어 있던 파일이라는 의미이다.
+				sampleDAO.insertFile(tempMap);
+			}
+			else{
+				sampleDAO.updateFile(tempMap);
+			}
+		}
 	};
 	
 	/* 삭제 */

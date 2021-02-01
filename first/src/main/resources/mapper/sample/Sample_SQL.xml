@@ -19,19 +19,14 @@
 		]]>
 	</select>
 
-	<!-- sample.insertBoard
-		목표
-			<selectKey> 구문을 통해서 다음 게시글 번호를 가져온 후, 그 값은 파라미터에 다시 저장된다.
-			-> FileUtils 클래스에서 방금 insert가 되었던 IDX값을 사용 
- 
-		속성
-			useGeneratedKeys
-				DB에 입력(insert, update)시 데이터베이스에서 자동적으로 증가되는 키를 받는 JDBC의 getGeneratedKeys() 메서드를 사용
-			keyProperty
-				getGeneratedKeys() 메서드나 insert구문의 selectKey에 의해 선택된 키를 셋팅
-	-->
-	<insert id="insertBoard" parameterType="hashmap" useGeneratedKeys="true" keyProperty="IDX" >
-		<selectKey keyProperty="IDX" resultType="string" order="BEFORE">
+	<!-- sample.insertBoard 목표 <selectKey> 구문을 통해서 다음 게시글 번호를 가져온 후, 그 값은 파라미터에 
+		다시 저장된다. -> FileUtils 클래스에서 방금 insert가 되었던 IDX값을 사용 속성 useGeneratedKeys DB에 
+		입력(insert, update)시 데이터베이스에서 자동적으로 증가되는 키를 받는 JDBC의 getGeneratedKeys() 메서드를 
+		사용 keyProperty getGeneratedKeys() 메서드나 insert구문의 selectKey에 의해 선택된 키를 셋팅 -->
+	<insert id="insertBoard" parameterType="hashmap"
+		useGeneratedKeys="true" keyProperty="IDX">
+		<selectKey keyProperty="IDX" resultType="string"
+			order="BEFORE">
 			SELECT SEQ_TB_BOARD_IDX.NEXTVAL FROM DUAL
 		</selectKey>
 		<![CDATA[
@@ -110,7 +105,8 @@
 
 
 	<!-- 파일정보 조회 -->
-	<select id="selectFileList" parameterType="hashmap" resultType="hashmap">
+	<select id="selectFileList" parameterType="hashmap"
+		resultType="hashmap">
 		<![CDATA[
 			SELECT
 			    IDX,
@@ -123,6 +119,14 @@
 			    AND DEL_GB = 'N'
 		]]>
 	</select>
+
+	<!-- 파일정보 갱신 -->
+	<update id="deleteFileList" parameterType="hashmap"> <![CDATA[ UPDATE TB_FILE SET DEL_GB = 'Y' WHERE BOARD_IDX = #{IDX} ]]>
+	</update>
+	
+	<!-- 파일정보 초기화 -->
+	<update id="updateFile" parameterType="hashmap"> <![CDATA[ UPDATE TB_FILE SET DEL_GB = 'N' WHERE IDX = #{FILE_IDX} ]]>
+	</update>
 
 
 

@@ -50,6 +50,15 @@ public class SampleDAO extends AbstractDAO {
 		return (List<Map<String, Object>>)selectList("sample.selectFileList", map);
 	}
 
+	/* 첨부파일 초기화 */
+	public void deleteFileList(Map<String, Object> map) throws Exception{
+		update("sample.deleteFileList", map);
+	}
+	/* 첨부파일 갱신 */
+	public void updateFile(Map<String, Object> map) throws Exception{
+		update("sample.updateFile", map);
+	}
+
 
 
 
