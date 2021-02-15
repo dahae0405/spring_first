@@ -28,7 +28,7 @@
 	<!-- Application Loggers level이 debug이하여야 sql문이 출력되는데 기본값은 info로 되어있다. debug로 
 		바꿔주면 아래와 같이 sql문이 출력되는 것을 볼 수 있다. -->
 	<logger name="first">
-		<level value="trace" />
+		<level value="debug" /> <!-- info || debug || trace -->
 	</logger>
 
 	<!-- 3rdparty Loggers -->
@@ -52,7 +52,7 @@
 		대한 설정을 한번에 할 수 있다. -->
 		
 	<root>
-		<priority value="trace" />
+		<priority value="debug" />
 		<appender-ref ref="console" />
 	</root>
 

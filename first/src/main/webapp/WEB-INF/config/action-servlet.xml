@@ -1,17 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="http://www.springframework.org/schema/beans"
-    xmlns:mvc="http://www.springframework.org/schema/mvc"
-    xsi:schemaLocation="
-    	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-    	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-    	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-       	
-       ">
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+	       
 
-	<context:component-scan base-package="first"></context:component-scan>
+	<!-- context-*.xml 와 *-servlet.xml 처리작업 분리org.spBringframework.stereotype.Controller
+			1.why ? 
+				spring mvc에 지정된 패턴임
+			
+			2. 추가로
+				root-context.xml -> 모든 BEAN을 공유하므로 AOP를 통한 로그 등록
+									controller제외한 모든 dao,resource등등 들록
+				action-servlet -> controller만 등록
+				
+			3. controller타입의 bean만 스캔해서 등록합니다.	 
+				
+	 -->
+	<context:component-scan base-package="first" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
 
 	<!-- controller 젖근 전 파라미터 수정처리를 위한 resolver EX.commandMap 등록 절차 1. 아래 태그 
 		추가 최초 구동시 객체 생성하여 서블릿에 공유함, 서블릿에서 객체 생성(new문법)이 아닌 여기 만들어진 객체를 불러다씀) -->
@@ -25,10 +40,13 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
-			<bean id="loggerInterceptor"
-				class="first.common.logger.LoggerInterceptor"></bean>
+			<bean id="loggerInterceptor" class="first.common.logger.LoggerInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
+	
+	<!-- AOP 로그 클래스  등록 -->
+	<aop:aspectj-autoproxy/>
+	<bean id="loggerAspect" class="first.common.logger.LoggerAspect" />
 
 	<bean
 		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
@@ -43,5 +61,6 @@
 		p:viewClass="org.springframework.web.servlet.view.JstlView"
 		p:prefix="/WEB-INF/jsp/" p:suffix=".jsp">
 	</bean>
+	
 </beans>
 

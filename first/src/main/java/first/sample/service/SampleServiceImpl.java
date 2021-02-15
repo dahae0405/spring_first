@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import first.common.util.FileUtils;
 import first.sample.dao.SampleDAO;
 
-@Service("sampleService")
+@Service("sampleService") /* 서비스 anotation으로 선언 */
 public class SampleServiceImpl implements SampleService {
 	Logger log = Logger.getLogger(this.getClass());
 
